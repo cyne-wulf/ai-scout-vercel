@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export function Effects() {
+  const pathname = usePathname();
+
   useEffect(() => {
     document.documentElement.classList.add("js");
 
     const root = document.documentElement;
     const spotlight = document.querySelector(".spotlight");
-    const revealItems = document.querySelectorAll(".reveal");
 
     const onPointerMove = (event: PointerEvent) => {
       root.style.setProperty("--x", `${event.clientX}px`);
@@ -19,9 +21,25 @@ export function Effects() {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
     }
 
-    let observer: IntersectionObserver | null = null;
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+    };
+  }, []);
 
-    if ("IntersectionObserver" in window) {
+  useEffect(() => {
+    document.documentElement.classList.add("js");
+
+    let observer: IntersectionObserver | null = null;
+    let frame = 0;
+
+    frame = window.requestAnimationFrame(() => {
+      const revealItems = document.querySelectorAll<HTMLElement>(".reveal");
+
+      if (!("IntersectionObserver" in window)) {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+        return;
+      }
+
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -31,19 +49,26 @@ export function Effects() {
             }
           });
         },
-        { threshold: 0.14 },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
       );
 
-      revealItems.forEach((item) => observer?.observe(item));
-    } else {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-    }
+      revealItems.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        const isNearViewport = rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
+
+        if (item.classList.contains("is-visible") || isNearViewport) {
+          item.classList.add("is-visible");
+        } else {
+          observer?.observe(item);
+        }
+      });
+    });
 
     return () => {
-      window.removeEventListener("pointermove", onPointerMove);
+      window.cancelAnimationFrame(frame);
       observer?.disconnect();
     };
-  }, []);
+  }, [pathname]);
 
   return <div className="spotlight" aria-hidden="true" />;
 }
