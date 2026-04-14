@@ -412,6 +412,121 @@ h3 {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.blog-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-height: 24rem;
+  padding: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035)),
+    rgba(0, 0, 0, 0.62);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.4);
+}
+
+.blog-card > span,
+.blog-card time {
+  color: var(--dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.blog-card h3 a {
+  transition: color 180ms ease;
+}
+
+.blog-card h3 a:hover {
+  color: #ffffff;
+}
+
+.article-shell {
+  display: grid;
+  gap: 2.2rem;
+  max-width: 900px;
+  padding-top: 8rem;
+}
+
+.back-link {
+  justify-self: start;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.8rem;
+  color: #fff;
+  font-weight: 800;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.article-header {
+  display: grid;
+  gap: 1rem;
+}
+
+.article-header time {
+  color: var(--dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.article-body {
+  display: grid;
+  gap: 1.2rem;
+  padding: 1.4rem;
+  border-left: 1px solid var(--line);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
+}
+
+.article-body h2,
+.article-body h3 {
+  margin-top: 1.2rem;
+}
+
+.article-body p,
+.article-body li {
+  color: #d8d8d8;
+  font-size: 1.06rem;
+  line-height: 1.78;
+}
+
+.article-body ul,
+.article-body ol {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.article-body a {
+  border-bottom: 1px solid var(--line);
+  color: #fff;
+}
+
+.article-body blockquote {
+  border-left: 1px solid var(--line);
+  padding-left: 1rem;
+}
+
+.article-body code {
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  padding: 0.12rem 0.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
 .large-line {
   max-width: 880px;
   margin-top: 2.2rem;
@@ -748,6 +863,7 @@ blockquote p {
   .split-section.reverse,
   .text-grid,
   .feature-grid,
+  .blog-grid,
   .matrix-section,
   .closing-grid,
   .content-row,

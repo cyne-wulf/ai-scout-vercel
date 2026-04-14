@@ -1,33 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteChrome } from "@/components/site-chrome";
+import { getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog",
   description: "AI Scout blog foundation for future posts on on-chain deal intelligence, founder signal, and Web3 fundraising.",
 };
 
-const posts = [
-  {
-    label: "Deal Intelligence",
-    title: "On-chain founder signal is the next fundraising primitive.",
-    summary:
-      "A place for future writing on live pitch capture, evidence files, investor reactions, and the data layer behind AI Scout.",
-  },
-  {
-    label: "Auctions",
-    title: "From pitch rooms to compliant crypto auction workflows.",
-    summary:
-      "A future home for explainers on how live founder interactions can connect to transparent transaction records.",
-  },
-  {
-    label: "Agentic AI",
-    title: "Why AI agents need primary-source deal memory.",
-    summary:
-      "A future thread for how structured transcripts, sentiment, and verifiable records can feed autonomous investment workflows.",
-  },
-];
-
 export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <SiteChrome current="blog">
       <main>
@@ -46,16 +29,19 @@ export default function BlogPage() {
 
         <section className="section-pad product-band">
           <div className="section-heading reveal">
-            <p className="eyebrow">Coming Soon</p>
-            <h2>Built as a route, ready for real posts.</h2>
+            <p className="eyebrow">Research Notes</p>
+            <h2>Primary-source thinking for Web3 deal intelligence.</h2>
           </div>
-          <div className="feature-grid">
+          <div className="blog-grid">
             {posts.map((post, index) => (
-              <article className="feature-card reveal" key={post.title}>
+              <article className="blog-card reveal" key={post.slug}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <p className="eyebrow">{post.label}</p>
-                <h3>{post.title}</h3>
-                <p>{post.summary}</p>
+                <p className="eyebrow">{post.category}</p>
+                <h3>
+                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                </h3>
+                <p>{post.excerpt}</p>
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
               </article>
             ))}
           </div>
@@ -63,4 +49,13 @@ export default function BlogPage() {
       </main>
     </SiteChrome>
   );
+}
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00.000Z`));
 }
